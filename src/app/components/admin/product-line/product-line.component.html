@@ -1,0 +1,265 @@
+<div class="container" id="pl-container">
+  <div class="row">
+    <button
+      type="button"
+      (click)="onOpenModal(null, 'add')"
+      data-toggle="modal"
+      data-target="addProductLineModal"
+    >
+      Add Product Line
+    </button>
+  </div>
+  <div class="row d-block">
+    <table class="table table-striped float-left">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">name Product Line</th>
+          <th scope="col">statusLine</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let productline of productlines">
+          <th scope="row">{{ productline?.idPl }}</th>
+          <td>{{ productline?.nameProductLine }}</td>
+          <td>{{ productline?.statusLine == 1 ? "active" : "in-active" }}</td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="onOpenModal(productline, 'edit')"
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              (click)="onOpenModal(productline, 'delete')"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!--add Modal -->
+<div
+  class="modal fade"
+  id="addProductLineModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="addProductLineModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addProductLineModal">
+          Add new Product Line
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form
+          class="form-group"
+          #addForm="ngForm"
+          (ngSubmit)="onAddProductL(addForm)"
+        >
+          <label for="namepl">Name</label>
+          <input
+            type="text"
+            ngModel
+            class="form-control"
+            name="nameProductLine"
+            id="namepl"
+            required
+          />
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              ngModel
+              name="statusLine"
+              id="inlineRadio1"
+              value="1"
+              required
+            />
+            <label class="form-check-label" for="inlineRadio1">active</label>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              ngModel
+              name="statusLine"
+              id="inlineRadio2"
+              value="0"
+              required
+            />
+            <label class="form-check-label" for="inlineRadio2">in-active</label>
+          </div>
+          <div class="d-flex flex-row-reverse">
+            <button
+              type="submit"
+              [disabled]="addForm.invalid"
+              class="btn btn-success"
+            >
+              Add
+            </button>
+          </div>
+          <button
+            type="button"
+            id="add-productline-form"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+          >
+            Cancel
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--update Modal -->
+<div
+  class="modal fade"
+  id="updateProductLineModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="updateProductLineModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateProductLineModalLabel">
+          Update Product Line
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-group" #editForm="ngForm">
+          <input
+            type="hidden"
+            ngModel="{{ editproductline?.idPl }}"
+            class="form-control"
+            name="idPl"
+            id="idPl"
+          />
+
+          <label for="nameProductLine">Name Product Line</label>
+          <input
+            type="text"
+            ngModel="{{ editproductline?.nameProductLine }}"
+            class="form-control"
+            name="nameProductLine"
+            id="nameProductLine"
+          />
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="statusradio"
+              id="inlineRadio1"
+              ngModel="{{ editproductline?.statusLine }}"
+              value="1"
+            />
+            <label class="form-check-label" for="inlineRadio1">active</label>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="statusradio"
+              id="inlineRadio2"
+              ngModel="{{ editproductline?.statusLine }}"
+              value="0"
+            />
+            <label class="form-check-label" for="inlineRadio2">in-active</label>
+          </div>
+          <div class="d-flex flex-row-reverse">
+            <button
+              type="submit"
+              [disabled]="editForm.invalid"
+              (click)="onEditProductL(editForm.value)"
+              class="btn btn-success"
+            >
+              Save changes
+            </button>
+          </div>
+          <button
+            type="button"
+            id="edit-productline-form"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+          >
+            Cancel
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--update Modal -->
+<div
+  class="modal fade"
+  id="deleteProductLineModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="deleteProductLineModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteProductLineModalLabel">
+          Are your sure delete?
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">...</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="productlines?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+  <div class="alert alert-info" role="alert">
+    <h4 class="alert-heading">NO PRODUCTLINE!</h4>
+    <p>No Product Line were found.</p>
+  </div>
+</div>

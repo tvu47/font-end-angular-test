@@ -1,0 +1,48 @@
+<div class="container">
+  <header><h2>head Adminstrator</h2></header>
+</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-secondary">
+  <div class="container-fluid">
+    <!-- <a class="navbar-brand" href="/admin">Admin</a> -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/admin"
+            >Admin Home</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/staffs">Staff</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['products']">Products</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['productLine']">Product Line</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/orders">Orders</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<body class="container">
+  <router-outlet></router-outlet>
+</body>
+
+<div class="container">
+  <footer>.foot...</footer>
+</div>
