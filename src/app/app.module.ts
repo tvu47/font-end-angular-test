@@ -12,6 +12,8 @@ import { ProductLineComponent } from './components/admin/product-line/product-li
 import { ProductLineService } from './services/product-line.service';
 import { AdminHomeComponent } from './components/admin/admin-home/admin-home.component';
 import { ProductsComponent } from './components/admin/products/products.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { ProductService } from './services/product.service';
 
 @NgModule({
   declarations: [
@@ -23,8 +25,14 @@ import { ProductsComponent } from './components/admin/products/products.componen
     AdminHomeComponent,
     ProductsComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
-  providers: [ProductLineService],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    NgxPaginationModule,
+  ],
+  providers: [ProductLineService, ProductService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

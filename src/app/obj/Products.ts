@@ -1,12 +1,19 @@
+import { Observable } from 'rxjs';
+import { ProductLine } from './ProductLine';
+
 export interface Products {
-  id_sp: number;
-  id_pl: number;
+  idSp: number;
+  idPl: {
+    idPl: number;
+    nameProductLine: string;
+    statusLine: number;
+  };
   code: string;
-  name_product: string;
+  nameProduct: string;
   img: string;
   quatity: number;
-  price_import: number;
+  priceImport: number;
   price: number;
-  price_after_discount: number;
-  status_product: number;
+  priceAfterDiscount: number;
+  statusProduct: number;
 }

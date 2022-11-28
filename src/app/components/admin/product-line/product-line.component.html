@@ -20,7 +20,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let productline of productlines">
+        <tr
+          *ngFor="
+            let productline of productlines
+              | paginate: { itemsPerPage: 5, currentPage: p }
+          "
+        >
           <th scope="row">{{ productline?.idPl }}</th>
           <td>{{ productline?.nameProductLine }}</td>
           <td>{{ productline?.statusLine == 1 ? "active" : "in-active" }}</td>
@@ -42,6 +47,9 @@
           </td>
         </tr>
       </tbody>
+      <tfoot class="text-center">
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+      </tfoot>
     </table>
   </div>
 </div>
@@ -179,10 +187,11 @@
             <input
               class="form-check-input"
               type="radio"
-              name="statusradio"
+              name="statusLine"
               id="inlineRadio1"
-              ngModel="{{ editproductline?.statusLine }}"
-              value="1"
+              ngModel
+              [checked]="editproductline?.statusLine === 1"
+              [value]="1"
             />
             <label class="form-check-label" for="inlineRadio1">active</label>
           </div>
@@ -191,10 +200,11 @@
             <input
               class="form-check-input"
               type="radio"
-              name="statusradio"
+              name="statusLine"
               id="inlineRadio2"
-              ngModel="{{ editproductline?.statusLine }}"
-              value="0"
+              ngModel
+              [checked]="editproductline?.statusLine === 0"
+              [value]="0"
             />
             <label class="form-check-label" for="inlineRadio2">in-active</label>
           </div>
@@ -222,7 +232,7 @@
   </div>
 </div>
 
-<!--update Modal -->
+<!--delete Modal -->
 <div
   class="modal fade"
   id="deleteProductLineModal"
@@ -235,7 +245,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="deleteProductLineModalLabel">
-          Are your sure delete?
+          Are your sure delete {{ deleteproductline?.nameProductLine }}?
         </h5>
         <button
           type="button"
@@ -246,12 +256,22 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">...</div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          Close
+      <div class="modal-body">
+        <button
+          type="button"
+          id="delete-prol-form"
+          class="btn btn-secondary"
+          data-dismiss="modal"
+        >
+          NO
         </button>
-        <button type="button" class="btn btn-primary">Delete</button>
+        <button
+          type="button"
+          (click)="onDeleteProductL(deleteproductline!.idPl)"
+          class="btn btn-danger"
+        >
+          YES
+        </button>
       </div>
     </div>
   </div>

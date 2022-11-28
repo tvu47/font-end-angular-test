@@ -1,1 +1,453 @@
-<p>products works!</p>
+<div class="container" id="product-container">
+  <div class="d-flex mt-2">
+    <div class="input-group col-3">
+      <input
+        type="search"
+        class="form-control rounded"
+        name="keyword-product-search"
+        [(ngModel)]="keyword"
+        (ngModelChange)="getProductsByName()"
+        placeholder="Search"
+        aria-label="Search"
+        aria-describedby="search-addon"
+      />
+      <button type="button" class="btn btn-outline-primary">search</button>
+    </div>
+    <div>
+      <label for="prodline">Type Line:</label>
+      <select
+        class="form-select"
+        name="product-line-dropdown"
+        id="prodline"
+        [(ngModel)]="categoryId"
+        (ngModelChange)="getProductsByIdpl()"
+      >
+        <option value="0">All Product Line</option>
+        <option *ngFor="let prl of productL" [ngValue]="prl.idPl">
+          {{ prl.nameProductLine }}
+        </option>
+      </select>
+    </div>
+
+    <div *ngIf="categoryId === 0">
+      <label for="softPrice">Soft:</label>
+      <select
+        class="form-select"
+        name="product-line-dropdown"
+        id="softPrice"
+        [(ngModel)]="softMode"
+        (ngModelChange)="getAllProductsBySoft()"
+      >
+        <option value="0">price decrease</option>
+        <option value="1">price increase</option>
+      </select>
+    </div>
+    <div *ngIf="categoryId !== 0">
+      <label for="softPrice">Soft:</label>
+      <select
+        class="form-select"
+        name="product-line-dropdown"
+        id="softPrice"
+        [(ngModel)]="softMode"
+        (ngModelChange)="getAllProductsBySoftAndProl()"
+      >
+        <option value="0">price decrease</option>
+        <option value="1">price increase</option>
+      </select>
+    </div>
+    <button
+      type="button"
+      (click)="onOpenModal(null, 'add')"
+      data-toggle="modal"
+      data-target="addProductModal"
+      style="margin: auto"
+    >
+      Add Product
+    </button>
+  </div>
+  <table class="row table table-striped table-inverse table-responsive">
+    <thead class="thead-inverse">
+      <tr>
+        <th>Name Product</th>
+        <th>Image</th>
+        <th>Quatity</th>
+        <th>Price Import</th>
+        <th>Price</th>
+        <th>Price After Discount</th>
+        <th>Status Product</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="
+          let product of productList
+            | paginate: { itemsPerPage: 5, currentPage: p }
+        "
+      >
+        <td scope="row">{{ product.nameProduct }}</td>
+        <td>
+          <img
+            src="{{ product.img }}"
+            style="width: 100px; height: 100px"
+            alt=""
+          />
+        </td>
+        <td>{{ product.quatity }}</td>
+        <td>{{ product.priceImport }}</td>
+        <td>{{ product.price }}</td>
+        <td>{{ product.priceAfterDiscount }}</td>
+        <td>{{ product.statusProduct === 0 ? "in-active" : "active" }}</td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="onOpenModal(product, 'edit')"
+          >
+            Edit
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            (click)="onOpenModal(product, 'delete')"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot class="text-center">
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </tfoot>
+  </table>
+</div>
+
+<!-- add modal -->
+<div
+  class="modal fade"
+  id="addProductModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="addProductModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addProductModal">Add new Product</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form
+          class="form-group"
+          #addForm="ngForm"
+          (ngSubmit)="onAddProduct(addForm)"
+        >
+          <label for="nameProduct">Name Product</label>
+          <input
+            type="text"
+            ngModel
+            class="form-control"
+            name="nameProduct"
+            id="nameProduct"
+            required
+          />
+          <label for="img">Image Url</label>
+          <input
+            type="text"
+            ngModel
+            class="form-control"
+            name="img"
+            id="img"
+            required
+          />
+          <label for="prolSelect">Product Line</label>
+          <div>
+            <select class="form-select" name="idPl" ngModel id="prolSelect">
+              <option [ngValue]="prl" *ngFor="let prl of productL">
+                {{ prl.nameProductLine }}
+              </option>
+            </select>
+          </div>
+          <label for="quatity">Quatity</label>
+          <input
+            type="text"
+            ngModel
+            class="form-control"
+            name="quatity"
+            id="quatity"
+            required
+          />
+          <label for="priceImport">Price Import</label>
+          <input
+            type="text"
+            ngModel
+            class="form-control"
+            name="priceImport"
+            id="priceImport"
+            required
+          />
+          <label for="price">Price</label>
+          <input
+            type="text"
+            ngModel
+            class="form-control"
+            name="price"
+            id="price"
+            required
+          />
+          <label for="priceAfterDiscount">Price After Discount</label>
+          <input
+            type="text"
+            ngModel
+            class="form-control"
+            name="priceAfterDiscount"
+            id="priceAfterDiscount"
+            required
+          />
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              ngModel
+              name="statusProduct"
+              id="inlineRadio1"
+              value="1"
+              required
+            />
+            <label class="form-check-label" for="inlineRadio1">active</label>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              ngModel
+              name="statusProduct"
+              id="inlineRadio2"
+              value="0"
+              required
+            />
+            <label class="form-check-label" for="inlineRadio2">in-active</label>
+          </div>
+          <div class="d-flex flex-row-reverse">
+            <button type="submit" class="btn btn-success">Add</button>
+          </div>
+          <button
+            type="button"
+            id="cancel-add-product-form"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+          >
+            Cancel
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- edit modal -->
+<div
+  class="modal fade"
+  id="editProductModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="editProductModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editProductModal">Add new Product</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-group" #editForm="ngForm">
+          <input
+            type="hidden"
+            ngModel="{{ editProd?.idSp }}"
+            class="form-control"
+            name="idSp"
+            id="idSp"
+          />
+          <input
+            type="hidden"
+            ngModel="{{ editProd?.code }}"
+            class="form-control"
+            name="code"
+            id="code"
+          />
+          <label for="nameProduct">Name Product</label>
+          <input
+            type="text"
+            ngModel="{{ editProd?.nameProduct }}"
+            class="form-control"
+            name="nameProduct"
+            id="nameProduct"
+            required
+          />
+          <label for="img">Image Url</label>
+          <input
+            type="text"
+            ngModel="{{ editProd?.img }}"
+            class="form-control"
+            name="img"
+            id="img"
+            required
+          />
+          <label for="idPl">Product Line</label>
+          <div>
+            <select class="form-select" name="idPl" ngModel id="idPl">
+              <option
+                [ngValue]="prl"
+                *ngFor="let prl of productL"
+                [selected]="prl.idPl === editProd?.idPl?.idPl"
+              >
+                {{ prl.nameProductLine }}
+              </option>
+            </select>
+          </div>
+          <label for="quatity">Quatity</label>
+          <input
+            type="text"
+            ngModel="{{ editProd?.quatity }}"
+            class="form-control"
+            name="quatity"
+            id="quatity"
+            required
+          />
+          <label for="priceImport">Price Import</label>
+          <input
+            type="text"
+            ngModel="{{ editProd?.priceImport }}"
+            class="form-control"
+            name="priceImport"
+            id="priceImport"
+            required
+          />
+          <label for="price">Price</label>
+          <input
+            type="text"
+            ngModel="{{ editProd?.price }}"
+            class="form-control"
+            name="price"
+            id="price"
+            required
+          />
+          <label for="priceAfterDiscount">Price After Discount</label>
+          <input
+            type="text"
+            ngModel="{{ editProd?.priceAfterDiscount }}"
+            class="form-control"
+            name="priceAfterDiscount"
+            id="priceAfterDiscount"
+            required
+          />
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              ngModel
+              [checked]="editProd?.statusProduct === 1"
+              name="statusProduct"
+              id="inlineRadio1"
+              value="1"
+              required
+            />
+            <label class="form-check-label" for="inlineRadio1">active</label>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              ngModel
+              [checked]="editProd?.statusProduct === 0"
+              name="statusProduct"
+              id="inlineRadio2"
+              value="0"
+              required
+            />
+            <label class="form-check-label" for="inlineRadio2">in-active</label>
+          </div>
+          <div class="d-flex flex-row-reverse">
+            <button
+              type="submit"
+              class="btn btn-success"
+              (click)="onEditProducts(editForm.value)"
+            >
+              Save
+            </button>
+          </div>
+          <button
+            type="button"
+            id="cancel-edit-product-form"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+          >
+            Cancel
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- delete modal -->
+<div
+  class="modal fade"
+  id="deleteProductModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="deleteProductModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteProductModal">
+          Are you sure delete this product {{ deleteProd?.nameProduct }} ?
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <button
+          (click)="onDeleteProducts(deleteProd!.idSp)"
+          class="btn btn-danger"
+        >
+          YES
+        </button>
+        <button
+          type="button"
+          id="cancel-delete-product-form"
+          class="btn btn-secondary"
+          data-dismiss="modal"
+        >
+          NO
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

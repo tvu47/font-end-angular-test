@@ -9,14 +9,6 @@ import { catchError, Observable, retry, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ProductLine } from '../obj/ProductLine';
 
-const httpOptionsPlain = {
-  headers: new HttpHeaders({
-    Accept: 'text/plain',
-    'Content-Type': 'text/plain',
-  }),
-  responseType: 'arraybuffer',
-};
-
 @Injectable({
   providedIn: 'root',
 })
@@ -28,6 +20,12 @@ export class ProductLineService {
   public getProductLine(): Observable<ProductLine[]> {
     return this.http.get<ProductLine[]>(
       `${this.apiServerUrl}/list-product-line`
+    );
+  }
+
+  public getProductLineById(id: number): Observable<ProductLine> {
+    return this.http.get<ProductLine>(
+      `${this.apiServerUrl}/admin/productLine/findProductLineByID/${id}`
     );
   }
 
@@ -44,10 +42,10 @@ export class ProductLineService {
       productline
     );
   }
-  public deleteProductLine(productline: ProductLine): Observable<ProductLine> {
-    return this.http.post<ProductLine>(
-      `${this.apiServerUrl}/admin/productLine/add-product-line`,
-      productline
+
+  public deleteProductLine(productlineId: number): Observable<void> {
+    return this.http.delete<void>(
+      `${this.apiServerUrl}/admin/productLine/delete/${productlineId}`
     );
   }
 }

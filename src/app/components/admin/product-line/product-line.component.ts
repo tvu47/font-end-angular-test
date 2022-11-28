@@ -10,8 +10,10 @@ import { ProductLineService } from 'src/app/services/product-line.service';
   styleUrls: ['./product-line.component.scss'],
 })
 export class ProductLineComponent implements OnInit {
-  public productlines: ProductLine[] | undefined;
+  public productlines!: ProductLine[];
   public editproductline: ProductLine | null | undefined;
+  public deleteproductline: ProductLine | null | undefined;
+  public p: number = 1;
 
   constructor(private productLineService: ProductLineService) {}
 
@@ -35,9 +37,11 @@ export class ProductLineComponent implements OnInit {
     this.productLineService.addProductLine(addFrom.value).subscribe({
       complete: () => {
         this.getProductLine();
+        addFrom.reset();
       },
       error: () => {
         alert('error');
+        addFrom.reset();
       },
     });
   }
@@ -45,6 +49,18 @@ export class ProductLineComponent implements OnInit {
   public onEditProductL(pro: ProductLine): void {
     document.getElementById('edit-productline-form')?.click();
     this.productLineService.editProductLine(pro).subscribe({
+      complete: () => {
+        this.getProductLine();
+      },
+      error: () => {
+        alert('error');
+      },
+    });
+  }
+
+  public onDeleteProductL(prol: number): void {
+    document.getElementById('delete-prol-form')?.click();
+    this.productLineService.deleteProductLine(prol).subscribe({
       complete: () => {
         this.getProductLine();
       },
@@ -66,6 +82,7 @@ export class ProductLineComponent implements OnInit {
       this.editproductline = productl;
       button.setAttribute('data-target', '#updateProductLineModal');
     } else if (mode === 'delete') {
+      this.deleteproductline = productl;
       button.setAttribute('data-target', '#deleteProductLineModal');
     }
     container?.appendChild(button);
