@@ -1,0 +1,190 @@
+<div class="container" id="staff-container">
+  <div class="row mt-2">
+    <div class="col-md-4 col-lg-4 col-lg-offset-4">
+      <select name="" id="" class="form-select">
+        <option value="1">salary increase</option>
+        <option value="2">salary decrease</option>
+      </select>
+    </div>
+    <div class="col-lg-4 col-lg-offset-4">
+      <input
+        type="search"
+        id="search"
+        value=""
+        class="form-control"
+        placeholder="Search name staff searching"
+      />
+    </div>
+  </div>
+  <div class="row">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">name</th>
+          <th scope="col">Address</th>
+          <th scope="col">Phone number</th>
+          <th scope="col">Birthday</th>
+          <th scope="col">Username</th>
+          <th scope="col">Password</th>
+          <th scope="col">Roles</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of listStaff; let i = index">
+          <th>{{ i + 1 }}</th>
+          <td>{{ item.nameStaff }}</td>
+          <td>{{ item.permanentAddress }}</td>
+          <td>{{ item.phoneNumber }}</td>
+          <td>{{ item.bithday }}</td>
+          <td>{{ item.username }}</td>
+          <td>{{ item.passwd }}</td>
+          <td>{{ item.roles }}</td>
+          <td>{{ item.statusStaff == 1 ? "active" : "in-active" }}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <div class="">
+          <button
+            type="button"
+            (click)="onOpenModal(null, 'add')"
+            data-toggle="modal"
+            data-target="addProductModal"
+            style="margin: auto"
+          >
+            Add
+          </button>
+        </div>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
+<!-- add modal -->
+<div
+  class="modal fade"
+  id="addStaffModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="addStaffModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addStaffModal">Add new Staff</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form
+          class="form-group"
+          #addForm="ngForm"
+          (ngSubmit)="onAddStaff(addForm)"
+        >
+          <label for="nameStaff">Name Staff</label>
+          <input
+            type="text"
+            ngModel
+            class="form-control"
+            name="nameStaff"
+            id="nameStaff"
+            required
+          />
+          <label for="permanentAddress">Address</label>
+          <input
+            type="text"
+            ngModel
+            class="form-control"
+            name="permanentAddress"
+            id="permanentAddress"
+            required
+          />
+          <label for="role">Access-retrieve:</label>
+          <div *ngFor="let rol of listRoles">
+            <input
+              type="checkbox"
+              id="role"
+              ngModel
+              name="roles"
+              value="rol.nameRole"
+            />
+            {{ rol.nameRole }}
+          </div>
+
+          <label for="phoneNumber">Phone Number</label>
+          <input
+            type="text"
+            ngModel
+            class="form-control"
+            name="phoneNumber"
+            id="phoneNumber"
+            required
+          />
+          <label for="bithday">Birthday</label>
+          <input
+            type="text"
+            ngModel
+            class="form-control"
+            name="bithday"
+            id="bithday"
+            required
+          />
+          <label for="username">Username</label>
+          <input
+            type="text"
+            ngModel
+            class="form-control"
+            name="username"
+            id="username"
+            required
+          />
+
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              ngModel
+              name="statusStaff"
+              id="inlineRadio1"
+              value="1"
+              required
+            />
+            <label class="form-check-label" for="inlineRadio1">active</label>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              ngModel
+              name="statusStaff"
+              id="inlineRadio2"
+              value="0"
+              required
+            />
+            <label class="form-check-label" for="inlineRadio2">in-active</label>
+          </div>
+          <div class="d-flex flex-row-reverse">
+            <button type="submit" class="btn btn-success">Add</button>
+          </div>
+          <button
+            type="button"
+            id="cancel-add-product-form"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+          >
+            Cancel
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
