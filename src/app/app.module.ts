@@ -19,6 +19,7 @@ import { AuthService } from './services/auth.service';
 import { LoginComponentComponent } from './components/admin/login/login-component/login-component.component';
 import { RegisterComponent } from './components/admin/register/register.component';
 import { StaffsComponent } from './components/admin/staffs/staffs.component';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { StaffsComponent } from './components/admin/staffs/staffs.component';
       useClass: AdminterceptorInterceptor,
       multi: true,
     },
+    CookieService,
   ],
   bootstrap: [AppComponent],
 })

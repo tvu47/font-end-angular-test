@@ -18,6 +18,7 @@ export class ProductsComponent implements OnInit {
   public p: number = 1;
   public keyword!: string;
   public categoryId: number = 0;
+
   public softMode: number = 0;
 
   constructor(

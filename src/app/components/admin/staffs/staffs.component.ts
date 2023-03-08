@@ -52,7 +52,7 @@ export class StaffsComponent implements OnInit {
         console.log('add successfully!!!' + n);
       },
       error: (e) => {
-        alert(e);
+        console.log('add error!!!' + e);
       },
     });
   }

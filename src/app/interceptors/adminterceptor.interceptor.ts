@@ -8,32 +8,28 @@ import {
 } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { AuthService } from '../services/auth.service';
 // import { AuthState } from '../../store/auth.state';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable()
 export class AdminterceptorInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor(private cookie: CookieService) {}
 
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const token = 'mytoken';
-    const headers = new HttpHeaders()
-      .set('access-token', token)
-      .set('Authorization', 'Bearer ' + token);
+    const token = this.cookie.get('token');
+    const headers = new HttpHeaders();
+
+    if (!token) {
+      console.log('token undefined, ', token);
+      const AuthRequest = request.clone({ headers: headers });
+      return next.handle(AuthRequest);
+    }
+    console.log('give token from cookie, ', token);
+    headers.set('Authorization', 'Bearer ' + token);
     const AuthRequest = request.clone({ headers: headers });
     return next.handle(AuthRequest);
   }
-
-  // addAuthToken(request: HttpRequest<any>) {
-  //   const token = this.authService.getAuthToken();
-
-  //   return request.clone({
-  //       setHeaders: {
-  //         Authorization: `Basic ${token}`
-  //       }
-  //   })
-  // }
 }

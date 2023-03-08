@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Token } from '../obj/AuthenticationToken';
 import { Staffs } from '../obj/Staffs';
 
 @Injectable({
@@ -12,18 +13,11 @@ export class LoginService {
   private apiServerUrl = environment.apiBaseUrl;
   constructor(private http: HttpClient) {}
 
-  public onlogin(users: UsernameAndPasswd): Observable<Staffs> {
-    const params = new HttpParams({
-      fromObject: {
-        username: users.username,
-        password: users.password,
-      },
-    });
-    return this.http.post<Staffs>(`${this.apiServerUrl}/api/login`, params, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
+  public onlogin(users: UsernameAndPasswd): Observable<Token> {
+    return this.http.post<Token>(
+      `${this.apiServerUrl}/api/v1/auth/login`,
+      users
+    );
   }
 }
 

@@ -10,5 +10,4 @@ export interface Staffs {
   username: string;
   passwd: string;
   statusStaff: number;
-  roles: [];
 }
